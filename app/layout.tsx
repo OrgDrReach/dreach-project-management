@@ -42,7 +42,7 @@ export default function RootLayout({
 									{!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
 								</div>
 							</nav> */}
-							<nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+							<nav className="w-full flex justify-center border-b border-b-foreground/10 h-16 top-0 z-20">
 								<div className="container mx-auto flex justify-between items-center">
 									<a href="/" className="text-xl font-bold">
 										Dr. Reach Project Management
@@ -55,9 +55,9 @@ export default function RootLayout({
 									</div>
 								</div>
 							</nav>
-							<div className="container mx-auto mt-8 p-8">{children}</div>
+							<div className="flex flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto p-8">{children}</div>
 
-							<footer className="w-full flex flex-col items-center justify-center border-t text-center text-xs gap-4 py-2">
+							<footer className="w-full flex flex-col items-center justify-center border-t text-center text-xs gap-4 py-2 bottom-0 absolute">
 								<div className={`flex items-center mt-4`}>
 									<p className={`text-xs`}>
 										©️Copyright 2024 All rights reserved | Dr. Reach -
