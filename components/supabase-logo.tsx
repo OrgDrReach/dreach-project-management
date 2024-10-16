@@ -1,9 +1,16 @@
-export default function SupabaseLogo() {
+import React from "react";
+
+interface LogoSize {
+  width: string,
+  height: string,
+};
+
+export default function SupabaseLogo({ width, height }: LogoSize) {
   return (
     <svg
       aria-label="Supabase logo"
-      width="140"
-      height="30"
+      width={width}
+      height={height}
       viewBox="0 0 115 23"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
