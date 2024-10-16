@@ -10,7 +10,7 @@ export default function Header() {
           target="_blank"
           rel="noreferrer"
         >
-          <SupabaseLogo />
+          <SupabaseLogo width="160" height="40" />
         </a>
         <span className="border-l rotate-45 h-6" />
         <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
