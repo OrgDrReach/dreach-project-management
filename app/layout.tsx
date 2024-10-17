@@ -55,6 +55,7 @@ export default function RootLayout({
 										<a href="/payroll" className="mr-4">Payroll</a>
 										<a href="/documents" className="mr-4">Documents</a>
 										<a href="/meetings" className="mr-4">Meetings</a>
+										<a href="/calendar" className="mr-4">Calendar</a>
 									</div>
 								</div>
 							</nav>
