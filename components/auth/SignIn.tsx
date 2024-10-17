@@ -15,15 +15,20 @@ export default function SignIn() {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      console.error("Error signing in:", error);
-    } else {
-      router.push("/dashboard");
+      if (error) {
+        console.error("Error signing in:", error);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error with Supabase client:", error);
     }
   };
 
