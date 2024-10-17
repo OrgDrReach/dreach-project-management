@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
+import { FileObject } from "@supabase/storage-js";
 
 interface FileListProps {
   projectId: string;
 }
 
 export default function FileList({ projectId }: FileListProps) {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<FileObject[]>([]);
   const supabase = createClient();
 
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     const { data, error } = await supabase.storage
       .from("project-files")
       .list(`project-files/${projectId}`);
@@ -20,13 +21,13 @@ export default function FileList({ projectId }: FileListProps) {
     if (error) {
       console.error("Error fetching files:", error);
     } else {
-      setFiles(data);
+      setFiles(data || []);
     }
-  };
+  }, [supabase, projectId]);
 
   useEffect(() => {
     fetchFiles();
-  }, [projectId]);
+  }, [fetchFiles]);
 
   const handleDownload = async (fileName: string) => {
     const { data, error } = await supabase.storage
