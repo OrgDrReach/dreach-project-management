@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { Inter } from "next/font/google";
@@ -5,21 +11,46 @@ import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
 import SupabaseLogo from "@/components/supabase-logo";
+import Head from "next/head";
+import { Session, User } from '@supabase/supabase-js'
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-	title: "Project Management App",
-	description: "A comprehensive project and employee management system",
-};
 
 export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const [user, setUser] = useState<User | null>(null);
+	const router = useRouter();
+	const supabase = createClientComponentClient();
+
+	useEffect(() => {
+		const { data: authListener } = supabase.auth.onAuthStateChange(
+			(event: string, session: Session | null) => {
+				setUser(session?.user ?? null);
+			}
+		);
+
+		return () => {
+			authListener.subscription.unsubscribe();
+		};
+	}, [supabase.auth]);
+
+	const handleSignOut = async () => {
+		await supabase.auth.signOut();
+		router.push("/auth");
+	};
+
 	return (
 		<html lang="en" className={inter.className} suppressHydrationWarning>
+			<Head>
+				<title>Project Management App</title>
+				<meta
+					name="description"
+					content="A comprehensive project and employee management system"
+				/>
+			</Head>
 			<body className="bg-background text-foreground">
 				<ThemeProvider
 					attribute="class"
@@ -45,17 +76,34 @@ export default function RootLayout({
 										Dr. Reach Project Management
 									</a>
 									<div>
-										<a href="/dashboard" className={`mr-4`}>
-											Dashboard
-										</a>
-										<a href="/projects" className="mr-4">
-											Projects
-										</a>
-										<a href="/employees" className="mr-4">Employees</a>
-										<a href="/payroll" className="mr-4">Payroll</a>
-										<a href="/documents" className="mr-4">Documents</a>
-										<a href="/meetings" className="mr-4">Meetings</a>
-										<a href="/calendar" className="mr-4">Calendar</a>
+										{user ? (
+											<>
+												<a href="/dashboard" className="mr-4">
+													Dashboard
+												</a>
+												<a href="/projects" className="mr-4">
+													Projects
+												</a>
+												<a href="/employees" className="mr-4">
+													Employees
+												</a>
+												<a href="/payroll" className="mr-4">
+													Payroll
+												</a>
+												<a href="/documents" className="mr-4">
+													Documents
+												</a>
+												<a href="/meetings" className="mr-4">
+													Meetings
+												</a>
+												<a href="/calendar" className="mr-4">
+													Calendar
+												</a>
+												<Button onClick={handleSignOut}>Sign Out</Button>
+											</>
+										) : (
+											<a href="/auth">Sign In</a>
+										)}
 									</div>
 								</div>
 							</nav>
