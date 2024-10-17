@@ -15,12 +15,18 @@ import {
 import { useRouter } from "next/navigation";
 import { sendNotification } from "@/utils/notification/notifications";
 
+interface Employee {
+	id: string;
+	first_name: string;
+	last_name: string;
+}
+
 export default function CreateTaskForm({ projectId }: { projectId: string }) {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [assigneeId, setAssigneeId] = useState("");
 	const [dueDate, setDueDate] = useState("");
-	const [employees, setEmployees] = useState([]);
+	const [employees, setEmployees] = useState<Employee[]>([]);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -32,7 +38,8 @@ export default function CreateTaskForm({ projectId }: { projectId: string }) {
 			if (error) {
 				console.error("Error fetching employees:", error);
 			} else {
-				setEmployees(data);
+				// Explicitly type the data as Employee[]
+				setEmployees(data as Employee[]);
 			}
 		};
 		fetchEmployees();

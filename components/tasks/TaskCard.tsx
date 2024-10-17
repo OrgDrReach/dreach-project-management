@@ -42,12 +42,16 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
 			onUpdate();
 
 			// Send notification to the task assignee
-			if (task.assignee_id) {
-				await sendNotification(
-					task.assignee_id,
-					"Task Status Updated",
-					`The status of task "${task.title}" has been updated to ${newStatus}`
-				);
+			if (task.assignee) {
+				// Assuming there's a function to get the assignee's ID
+				const assigneeId = await getAssigneeId(task.assignee);
+				if (assigneeId) {
+					await sendNotification(
+						assigneeId,
+						"Task Status Updated",
+						`The status of task "${task.title}" has been updated to ${newStatus}`
+					);
+				}
 			}
 		}
 	};
@@ -82,4 +86,24 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
 			</CardContent>
 		</Card>
 	);
+}
+
+async function getAssigneeId(assignee: { first_name: string; last_name: string }): Promise<string | null> {
+	const supabase = createClient();
+	const { data, error } = await supabase
+		.from('users')
+		.select('id')
+		.match({ first_name: assignee.first_name, last_name: assignee.last_name })
+		.single();
+
+	if (error) {
+		if (error.code === 'PGRST116') {
+			console.warn(`No user found for ${assignee.first_name} ${assignee.last_name}`);
+			return null;
+		}
+		console.error('Error fetching assignee ID:', error);
+		return null;
+	}
+
+	return data?.id ?? null;
 }
