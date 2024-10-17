@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import TaskList from "@/components/tasks/TaskList";
 import CreateTaskForm from "@/components/tasks/CreateTaskForm";
+import FileUpload from "@/components/file/FileUpload";
+import FileList from "@/components/file/FileList";
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -28,9 +30,18 @@ export default async function ProjectPage({ params }: { params: { id: string } }
         </CardContent>
       </Card>
 
-      <h2 className="text-2xl font-bold mb-4">Tasks</h2>
-      <CreateTaskForm projectId={project.id} />
-      <TaskList projectId={project.id} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Tasks</h2>
+          <CreateTaskForm projectId={project.id} />
+          <TaskList projectId={project.id} />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Files</h2>
+          <FileUpload projectId={project.id} onUploadComplete={() => {}} />
+          <FileList projectId={project.id} />
+        </div>
+      </div>
     </div>
   );
 }

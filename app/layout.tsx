@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
@@ -12,7 +12,8 @@ import Link from "next/link";
 import "./globals.css";
 import SupabaseLogo from "@/components/supabase-logo";
 import Head from "next/head";
-import { Session, User } from '@supabase/supabase-js'
+import { Session, User } from "@supabase/supabase-js";
+import Notification from "@/components/notifications/Notification";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -133,6 +134,7 @@ export default function RootLayout({
 							</footer>
 						</div>
 					</main>
+					<Notification />
 				</ThemeProvider>
 			</body>
 		</html>
