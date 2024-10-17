@@ -53,6 +53,8 @@ export default function RootLayout({
 										</a>
 										<a href="/employees" className="mr-4">Employees</a>
 										<a href="/payroll" className="mr-4">Payroll</a>
+										<a href="/documents" className="mr-4">Documents</a>
+										<a href="/meetings" className="mr-4">Meetings</a>
 									</div>
 								</div>
 							</nav>
