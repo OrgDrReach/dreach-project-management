@@ -3,29 +3,41 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Toast } from "@/components/ui/toast";
+import { useToast } from "@/components/ui/use-toast";
+
+// Define the shape of a notification
+interface Notification {
+  id: string;
+  title: string;
+  message: string;
+}
 
 export default function Notification() {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const supabase = createClient();
+  const { toast } = useToast();
 
   useEffect(() => {
     const channel = supabase
       .channel("notifications")
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications" }, (payload) => {
-        setNotifications((prev) => [...prev, payload.new]);
+        const newNotification = payload.new as Notification;
+        setNotifications((prev) => [...prev, newNotification]);
+        
+        // Show the toast for the new notification
+        toast({
+          title: newNotification.title,
+          description: newNotification.message,
+        });
       })
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [supabase, toast]);
 
-  return (
-    <div className="fixed bottom-4 right-4 space-y-2">
-      {notifications.map((notification) => (
-        <Toast key={notification.id} title={notification.title} description={notification.message} />
-      ))}
-    </div>
-  );
+  // We don't need to render individual Toast components here
+  // The toast function from useToast will handle displaying notifications
+  return null;
 }
