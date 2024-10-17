@@ -1,39 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import React from 'react';
 import { format, startOfWeek, addDays, isSameDay } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-
-interface Task {
-  id: string;
-  title: string;
-  due_date: string;
-  project_id: string;
-  projects: { name: string };
-}
-
-interface Meeting {
-  id: string;
-  title: string;
-  start_time: string;
-  end_time: string;
-}
+import { Task, Meeting } from "@/types/calendar";
 
 interface CalendarTimelineProps {
   tasks: Task[];
   meetings: Meeting[];
 }
 
-export default function CalendarTimeline({ tasks, meetings }: CalendarTimelineProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+const CalendarTimeline: React.FC<CalendarTimelineProps> = ({ tasks, meetings }) => {
+  const [currentDate, setCurrentDate] = React.useState(new Date());
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startOfWeek(currentDate), i));
 
-  const getEventsForDay = (date: Date) => {
+  const getEventsForDay = (date: Date): Task[] => {
     const dayTasks = tasks.filter((task) => isSameDay(new Date(task.due_date), date));
-    const dayMeetings = meetings.filter((meeting) => isSameDay(new Date(meeting.start_time), date));
-    return [...dayTasks, ...dayMeetings];
+    return dayTasks;
   };
+
+  const isTask = (event: Task): boolean => 'due_date' in event;
+
+  // Combine tasks and meetings into a single array of events
+  const events = [
+    ...getEventsForDay(currentDate).map(task => ({
+      id: `task-${task.id}`,
+      title: task.title,
+      start: new Date(task.due_date),
+      end: new Date(task.due_date),
+      type: 'task' as const,
+      projectName: task.projects?.[0]?.name || 'No Project'
+    })),
+    ...meetings.map(meeting => ({
+      id: `meeting-${meeting.id}`,
+      title: meeting.title,
+      start: new Date(meeting.start_time),
+      end: new Date(meeting.end_time),
+      type: 'meeting' as const
+    }))
+  ];
+
+  // Sort events by start time
+  events.sort((a, b) => a.start.getTime() - b.start.getTime());
 
   return (
     <div className="space-y-4">
@@ -49,9 +58,12 @@ export default function CalendarTimeline({ tasks, meetings }: CalendarTimelinePr
               <CardTitle>{format(day, "EEE dd")}</CardTitle>
             </CardHeader>
             <CardContent>
-              {getEventsForDay(day).map((event) => (
+              {events.map((event) => (
                 <div key={event.id} className="text-sm mb-1">
                   {event.title}
+                  {event.type === 'task' && ` (Due: ${format(new Date(event.start), "HH:mm")})`}
+                  {event.type === 'meeting' && ` (${format(new Date(event.start), "HH:mm")} - ${format(new Date(event.end), "HH:mm")})`}
+                  {event.type === 'task' && <p>Project: {event.projectName}</p>}
                 </div>
               ))}
             </CardContent>
@@ -60,4 +72,6 @@ export default function CalendarTimeline({ tasks, meetings }: CalendarTimelinePr
       </div>
     </div>
   );
-}
+};
+
+export default CalendarTimeline;
