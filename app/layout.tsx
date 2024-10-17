@@ -1,6 +1,3 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { Inter } from "next/font/google";
@@ -48,14 +45,20 @@ export default function RootLayout({
 										Dr. Reach Project Management
 									</a>
 									<div>
+										<a href="/dashboard" className={`mr-4`}>
+											Dashboard
+										</a>
 										<a href="/projects" className="mr-4">
 											Projects
 										</a>
-										<a href="/employees">Employees</a>
+										<a href="/employees" className="mr-4">Employees</a>
+										<a href="/payroll" className="mr-4">Payroll</a>
 									</div>
 								</div>
 							</nav>
-							<div className="flex flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto p-8">{children}</div>
+							<div className="flex flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mx-auto p-8">
+								{children}
+							</div>
 
 							<footer className="w-full flex flex-col items-center justify-center border-t text-center text-xs gap-4 py-2 bottom-0 absolute">
 								<div className={`flex items-center mt-4`}>
