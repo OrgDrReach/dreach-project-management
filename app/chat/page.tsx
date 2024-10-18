@@ -4,9 +4,18 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import ChatMessageList from "@/components/chat/ChatMessageList";
 import ChatInput from "@/components/chat/ChatInput";
+import { SupabaseClient } from "@supabase/supabase-js";
+
+// Define an interface for the message structure
+interface ChatMessage {
+  id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+}
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const supabase = createClient();
 
   useEffect(() => {
@@ -20,7 +29,7 @@ export default function ChatPage() {
       if (error) {
         console.error('Error fetching messages:', error);
       } else {
-        setMessages(data.reverse());
+        setMessages(data.reverse() as ChatMessage[]);
       }
     };
 
@@ -29,7 +38,7 @@ export default function ChatPage() {
     const channel = supabase
       .channel('chat_messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, (payload) => {
-        setMessages((prevMessages) => [...prevMessages, payload.new]);
+        setMessages((prevMessages) => [...prevMessages, payload.new as ChatMessage]);
       })
       .subscribe();
 
@@ -38,7 +47,7 @@ export default function ChatPage() {
     };
   }, [supabase]);
 
-  const handleSendMessage = async (content) => {
+  const handleSendMessage = async (content: string) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { error } = await supabase
