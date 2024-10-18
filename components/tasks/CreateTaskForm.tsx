@@ -26,6 +26,8 @@ export default function CreateTaskForm({ projectId }: { projectId: string }) {
 	const [description, setDescription] = useState("");
 	const [assigneeId, setAssigneeId] = useState("");
 	const [dueDate, setDueDate] = useState("");
+	const [startDate, setStartDate] = useState("");
+	const [endDate, setEndDate] = useState("");
 	const [employees, setEmployees] = useState<Employee[]>([]);
 	const router = useRouter();
 
@@ -118,6 +120,24 @@ export default function CreateTaskForm({ projectId }: { projectId: string }) {
 					type="date"
 					value={dueDate}
 					onChange={(e) => setDueDate(e.target.value)}
+				/>
+			</div>
+			<div>
+				<Label htmlFor="startDate">Start Date</Label>
+				<Input
+					id="startDate"
+					type="date"
+					value={startDate}
+					onChange={(e) => setStartDate(e.target.value)}
+				/>
+			</div>
+			<div>
+				<Label htmlFor="endDate">End Date</Label>
+				<Input
+					id="endDate"
+					type="date"
+					value={endDate}
+					onChange={(e) => setEndDate(e.target.value)}
 				/>
 			</div>
 			<Button type="submit">Create Task</Button>
