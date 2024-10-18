@@ -100,6 +100,9 @@ export default function RootLayout({
 												<a href="/calendar" className="mr-4">
 													Calendar
 												</a>
+												<a href="/chat" className="mr-4">
+													Chat
+												</a>
 												<Button onClick={handleSignOut}>Sign Out</Button>
 											</>
 										) : (
