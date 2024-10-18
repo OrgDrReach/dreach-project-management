@@ -29,7 +29,7 @@ export default async function ProjectTimelinePage({ params }: { params: { id: st
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">{project.name} - Timeline</h1>
-      <GanttChart tasks={tasks} />
+      <GanttChart tasks={tasks || []} />
     </div>
   );
 }
