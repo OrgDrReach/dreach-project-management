@@ -5,13 +5,15 @@ import TimeTrackingSummary from "@/components/time/TimeTrackingSummary";
 import DateRangeFilter from "@/components/time/DateRangeFilter";
 import { useState } from 'react';
 import GanttChart from '../../components/gantt/GanttChart';
+import { cookies } from 'next/headers';
 
 type SearchParams = {
   [key: string]: string | string[] | undefined
 };
 
 export default async function TimeTrackingPage({ searchParams }: { searchParams: SearchParams }) {
-  const supabase = await createServerSideClient();
+  const cookieStore = cookies();
+  const supabase = await createServerSideClient(cookieStore);
   const { data: { user } } = await supabase.auth.getUser();
   
   const startDate = searchParams.startDate as string || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();

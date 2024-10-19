@@ -1,9 +1,11 @@
 import { createServerSideClient } from "@/utils/supabase/server";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import UserSettingsForm from "@/components/settings/UserSettingsForm";
+import { cookies } from 'next/headers';
 
 export default async function SettingsPage() {
-  const supabase = await createServerSideClient();
+  const cookieStore = cookies();
+  const supabase = await createServerSideClient(cookieStore);
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
