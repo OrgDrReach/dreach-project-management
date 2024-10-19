@@ -3,6 +3,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import TimeSpentChart from "@/components/time/TimeSpentChart";
 import TimeTrackingSummary from "@/components/time/TimeTrackingSummary";
 import DateRangeFilter from "@/components/time/DateRangeFilter";
+import { useState } from 'react';
+import GanttChart from '../../components/gantt/GanttChart';
 
 type SearchParams = {
   [key: string]: string | string[] | undefined
