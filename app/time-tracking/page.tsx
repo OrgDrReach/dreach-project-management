@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { createServerSideClient } from "@/utils/supabase/server";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import TimeSpentChart from "@/components/time/TimeSpentChart";
 import TimeTrackingSummary from "@/components/time/TimeTrackingSummary";
@@ -11,7 +11,8 @@ type SearchParams = {
 };
 
 export default async function TimeTrackingPage({ searchParams }: { searchParams: SearchParams }) {
-  const supabase = createClient();
+  const supabase = await createServerSideClient();
+  const { data: { user } } = await supabase.auth.getUser();
   
   const startDate = searchParams.startDate as string || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const endDate = searchParams.endDate as string || new Date().toISOString();
