@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
+import { cookies } from "next/headers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import TaskCompletionChart from "@/components/tasks/TaskCompletionChart";
@@ -6,7 +7,8 @@ import ProjectProgressChart from "@/components/projects/ProjectProgressChart";
 import UpcomingDeadlines, { Deadline } from "@/components/tasks/UpcomingDeadlines";
 
 export default async function DashboardPage() {
-	const supabase = createClient();
+	const cookieStore = cookies();
+	const supabase = createClient(cookieStore);
 
 	const { data: projectCount } = await supabase
 		.from("projects")
