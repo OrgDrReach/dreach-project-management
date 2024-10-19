@@ -1,16 +1,17 @@
-interface TaskBarProps {
-  task: {
-    id: string;
-    title: string;
-    status: string;
-  };
+import React from 'react';
+import { useDrag } from 'react-dnd';
+import { Task } from "@/types/calendar";
+
+export interface TaskBarProps {
+  task: Task;
   startOffset: number;
   duration: number;
+  onMove: (newStartOffset: number) => void;
 }
 
-export default function TaskBar({ task, startOffset, duration }: TaskBarProps) {
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
+const TaskBar: React.FC<TaskBarProps> = ({ task, startOffset, duration, onMove }) => {
+  const getStatusColor = (status: string | undefined) => {
+    switch (status?.toLowerCase()) {
       case 'in progress':
         return 'bg-blue-500';
       case 'completed':
@@ -22,9 +23,12 @@ export default function TaskBar({ task, startOffset, duration }: TaskBarProps) {
     }
   };
 
+  // Use optional chaining and type assertion to safely access task.status
+  const statusColor = getStatusColor((task as any).status);
+
   return (
     <div
-      className={`absolute h-6 rounded ${getStatusColor(task.status)}`}
+      className={`absolute h-6 rounded ${statusColor}`}
       style={{
         left: `${startOffset * 4}rem`,
         width: `${duration * 4}rem`,
@@ -35,4 +39,6 @@ export default function TaskBar({ task, startOffset, duration }: TaskBarProps) {
       <span className="text-xs text-white px-1 truncate block">{task.title}</span>
     </div>
   );
-}
+};
+
+export default TaskBar;

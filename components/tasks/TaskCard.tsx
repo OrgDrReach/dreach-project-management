@@ -14,16 +14,10 @@ import {
 import { sendNotification } from "@/utils/notification/notifications";
 import TimeEntryForm from "@/components/time/TimeEntryForm";
 import TimeLogView from "@/components/time/TimeLogView";
+import { Task } from "@/types/calendar";
 
 interface TaskCardProps {
-	task: {
-		id: string;
-		title: string;
-		description: string;
-		status: string;
-		assignee: { first_name: string; last_name: string } | null;
-		due_date: string | null;
-	};
+	task: Task;
 	onUpdate: () => void;
 }
 
@@ -55,6 +49,19 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
 					);
 				}
 			}
+		}
+	};
+
+	const getStatusColor = (status: string | undefined) => {
+		switch (status?.toLowerCase()) {
+			case 'in progress':
+				return 'bg-blue-500';
+			case 'completed':
+				return 'bg-green-500';
+			case 'overdue':
+				return 'bg-red-500';
+			default:
+				return 'bg-gray-500';
 		}
 	};
 
