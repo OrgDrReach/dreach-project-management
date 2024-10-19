@@ -1,11 +1,13 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
+import { cookies } from 'next/headers';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  const supabase = createClient();
+  const cookieStore = cookies();
+  const supabase = createClient({ cookies: () => cookieStore });
   const { data: document, error } = await supabase
     .from("documents")
     .select("*, employees(first_name, last_name)")
