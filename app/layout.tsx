@@ -103,6 +103,9 @@ export default function RootLayout({
 												<a href="/chat" className="mr-4">
 													Chat
 												</a>
+												<a href="/time-tracking" className="mr-4">
+													Time Tracking
+												</a>
 												<Button onClick={handleSignOut}>Sign Out</Button>
 											</>
 										) : (
