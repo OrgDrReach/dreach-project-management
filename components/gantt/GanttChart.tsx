@@ -1,9 +1,12 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { startOfWeek, addDays, format, isWithinInterval, addBusinessDays } from 'date-fns';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import TaskBar, { TaskBarProps } from './TaskBar';
 import { Task } from '@/types/calendar';  // Import the Task type
+import { createClient } from "@/utils/supabase/server";
 
 // Update the Task interface to include start_date, end_date, and status
 interface ExtendedTask extends Task {
@@ -18,7 +21,7 @@ interface GanttChartProps {
   onTaskUpdate: (updatedTask: ExtendedTask) => void;
 }
 
-export default function GanttChart({ tasks }: GanttChartProps) {
+const GanttChart = ({ tasks }: GanttChartProps) => {
   const [startDate, setStartDate] = useState(startOfWeek(new Date()));
   const daysToShow = 14;
 
@@ -73,4 +76,6 @@ export default function GanttChart({ tasks }: GanttChartProps) {
       </div>
     </DndProvider>
   );
-}
+};
+
+export default GanttChart;
