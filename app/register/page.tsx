@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import LoginForm from "@/components/LoginForm";
+import RegisterForm from "@/components/RegisterForm";
 
-export default function Home() {
+export default function Register() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-gray-100">
       <main className="w-full max-w-md">
@@ -14,11 +14,11 @@ export default function Home() {
           height={38}
           priority
         />
-        <LoginForm />
+        <RegisterForm />
         <p className="mt-4 text-center text-sm">
-          Don't have an account?{" "}
-          <Link href="/register" className="text-blue-600 hover:underline">
-            Register here
+          Already have an account?{" "}
+          <Link href="/" className="text-blue-600 hover:underline">
+            Sign in here
           </Link>
         </p>
       </main>
