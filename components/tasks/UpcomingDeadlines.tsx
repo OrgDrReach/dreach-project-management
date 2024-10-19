@@ -1,32 +1,32 @@
-import { format } from 'date-fns';
-import Link from 'next/link';
+import React from "react";
+import { format } from "date-fns";
 
-interface Deadline {
-  id: string;
+export type Deadline = {
+  id: number;
   title: string;
   due_date: string;
-  project_id: string;
-  projects: { name: string };
-}
+  project_id: number;
+  projects: {
+    name: string;
+  };
+};
 
 interface UpcomingDeadlinesProps {
   deadlines: Deadline[];
 }
 
-export default function UpcomingDeadlines({ deadlines }: UpcomingDeadlinesProps) {
+const UpcomingDeadlines: React.FC<UpcomingDeadlinesProps> = ({ deadlines }) => {
   return (
-    <ul className="space-y-2">
+    <ul>
       {deadlines.map((deadline) => (
-        <li key={deadline.id} className="flex justify-between items-center">
-          <div>
-            <Link href={`/projects/${deadline.project_id}`} className="font-medium hover:underline">
-              {deadline.title}
-            </Link>
-            <p className="text-sm text-gray-500">{deadline.projects.name}</p>
-          </div>
-          <span className="text-sm">{format(new Date(deadline.due_date), 'MMM d, yyyy')}</span>
+        <li key={deadline.id} className="mb-2">
+          <span className="font-semibold">{deadline.title}</span> - 
+          {deadline.projects.name} - 
+          Due: {format(new Date(deadline.due_date), "MMM d, yyyy")}
         </li>
       ))}
     </ul>
   );
-}
+};
+
+export default UpcomingDeadlines;
