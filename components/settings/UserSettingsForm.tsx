@@ -7,17 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-interface UserSettingsFormProps {
-  initialSettings: {
-    default_time_entry_duration?: number;
-    auto_start_timer?: boolean;
-  };
-  userId: string;
+// Define a custom User type that includes the required properties
+interface CustomUser {
+  id: string;
+  default_time_entry_duration?: number;
+  auto_start_timer?: boolean;
 }
 
-export default function UserSettingsForm({ initialSettings, userId }: UserSettingsFormProps) {
-  const [defaultDuration, setDefaultDuration] = useState(initialSettings.default_time_entry_duration || 30);
-  const [autoStartTimer, setAutoStartTimer] = useState(initialSettings.auto_start_timer || false);
+interface UserSettingsFormProps {
+  user: CustomUser;
+}
+
+export default function UserSettingsForm({ user }: UserSettingsFormProps) {
+  const [defaultDuration, setDefaultDuration] = useState(user.default_time_entry_duration || 30);
+  const [autoStartTimer, setAutoStartTimer] = useState(user.auto_start_timer || false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ export default function UserSettingsForm({ initialSettings, userId }: UserSettin
     const { error } = await supabase
       .from('user_settings')
       .upsert({
-        user_id: userId,
+        user_id: user.id,
         default_time_entry_duration: defaultDuration,
         auto_start_timer: autoStartTimer
       });
