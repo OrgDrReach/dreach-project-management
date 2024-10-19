@@ -12,6 +12,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { sendNotification } from "@/utils/notification/notifications";
+import TimeEntryForm from "@/components/time/TimeEntryForm";
+import TimeLogView from "@/components/time/TimeLogView";
 
 interface TaskCardProps {
 	task: {
@@ -83,25 +85,37 @@ export default function TaskCard({ task, onUpdate }: TaskCardProps) {
 						</SelectContent>
 					</Select>
 				</div>
+				<div className="mt-4">
+					<h4 className="font-semibold mb-2">Log Time</h4>
+					<TimeEntryForm taskId={task.id} onComplete={onUpdate} />
+				</div>
+				<div className="mt-4">
+					<TimeLogView taskId={task.id} />
+				</div>
 			</CardContent>
 		</Card>
 	);
 }
 
-async function getAssigneeId(assignee: { first_name: string; last_name: string }): Promise<string | null> {
+async function getAssigneeId(assignee: {
+	first_name: string;
+	last_name: string;
+}): Promise<string | null> {
 	const supabase = createClient();
 	const { data, error } = await supabase
-		.from('users')
-		.select('id')
+		.from("users")
+		.select("id")
 		.match({ first_name: assignee.first_name, last_name: assignee.last_name })
 		.single();
 
 	if (error) {
-		if (error.code === 'PGRST116') {
-			console.warn(`No user found for ${assignee.first_name} ${assignee.last_name}`);
+		if (error.code === "PGRST116") {
+			console.warn(
+				`No user found for ${assignee.first_name} ${assignee.last_name}`
+			);
 			return null;
 		}
-		console.error('Error fetching assignee ID:', error);
+		console.error("Error fetching assignee ID:", error);
 		return null;
 	}
 
