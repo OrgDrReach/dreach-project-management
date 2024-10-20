@@ -284,7 +284,9 @@ export default function LandingPage() {
 								<Button
 									onClick={() => setShowAllFeatures(!showAllFeatures)}
 									variant="outline"
-									size="lg">
+									size="lg"
+									className="bg-indigo-600 text-white hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700"
+								>
 									{showAllFeatures ? (
 										<>
 											Show Less <ChevronUp className="ml-2 h-4 w-4" />
