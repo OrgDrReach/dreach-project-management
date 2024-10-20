@@ -32,6 +32,8 @@ import {
 	ChevronDown,
 	ChevronUp,
 } from "lucide-react";
+import { Footer } from "@/components/footer/Footer";
+import { DottedGrid } from "@/components/DottedGrid";
 
 export default function LandingPage() {
 	const [showAllFeatures, setShowAllFeatures] = useState(false);
@@ -192,9 +194,10 @@ export default function LandingPage() {
 	];
 
 	return (
-		<div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+			<DottedGrid className="opacity-50" />
 			<Navigation />
-			<main className="pt-16">
+			<main className="relative">
 				{/* Hero Section */}
 				<section className="relative bg-white dark:bg-gray-800 overflow-hidden">
 					<div className="max-w-7xl mx-auto">
@@ -244,8 +247,8 @@ export default function LandingPage() {
 				</section>
 
 				{/* Features Section */}
-				<section className="py-12 bg-gray-100 dark:bg-gray-700">
-					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<section className="relative py-12 bg-gray-100/50 dark:bg-gray-700/50">
+					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
 								Features
@@ -306,8 +309,8 @@ export default function LandingPage() {
 				</section>
 
 				{/* Organization Management Section */}
-				<section className="py-16 bg-white dark:bg-gray-800">
-					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<section className="relative py-16 bg-white/50 dark:bg-gray-800/50">
+					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center mb-12">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
 								Organization Management
@@ -451,6 +454,7 @@ export default function LandingPage() {
 					</div>
 				</section>
 			</main>
+			<Footer />
 		</div>
 	);
 }
