@@ -71,6 +71,7 @@ Dr. Reach Insights is a Kanban-based project management tool with advanced featu
 - Integrated shadcn UI components for improved user interface
 - Set up basic RBAC structure with user and admin roles
 - Created dashboard pages for different user roles
+- Implemented dark mode support using Next Themes and shadcn UI
 
 ## TODO
 
