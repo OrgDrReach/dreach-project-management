@@ -1,5 +1,8 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -40,9 +43,12 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">User Dashboard</h1>
-      <p>Welcome to your dashboard. Here you can manage your projects and tasks.</p>
+    <div className="p-8 bg-white dark:bg-gray-900 min-h-screen">
+      <div className="flex justify-end mb-4">
+        <ThemeToggle />
+      </div>
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">User Dashboard</h1>
+      <p className="text-gray-700 dark:text-gray-300">Welcome to your dashboard. Here you can manage your projects and tasks.</p>
       {/* Add more dashboard content here */}
     </div>
   );
