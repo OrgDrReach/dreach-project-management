@@ -281,22 +281,25 @@ export default function LandingPage() {
 
 						{features.length > 8 && (
 							<div className="mt-10 text-center">
-								<Button
-									onClick={() => setShowAllFeatures(!showAllFeatures)}
-									variant="outline"
-									size="lg"
-									className="bg-indigo-600 text-white hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700"
-								>
-									{showAllFeatures ? (
-										<>
-											Show Less <ChevronUp className="ml-2 h-4 w-4" />
-										</>
-									) : (
-										<>
-											Show More <ChevronDown className="ml-2 h-4 w-4" />
-										</>
-									)}
-								</Button>
+								<div className="inline-block relative">
+									<div className="absolute inset-0 bg-indigo-300 blur-xl opacity-50 rounded-lg"></div>
+									<Button
+										onClick={() => setShowAllFeatures(!showAllFeatures)}
+										variant="outline"
+										size="lg"
+										className="relative bg-indigo-600 text-white hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 transition-all duration-300 ease-in-out"
+									>
+										{showAllFeatures ? (
+											<>
+												Show Less <ChevronUp className="ml-2 h-4 w-4" />
+											</>
+										) : (
+											<>
+												Show More <ChevronDown className="ml-2 h-4 w-4" />
+											</>
+										)}
+									</Button>
+								</div>
 							</div>
 						)}
 					</div>
