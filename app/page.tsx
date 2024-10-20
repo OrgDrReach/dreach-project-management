@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Navigation } from "@/components/navigation/Navigation";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import {
 	Trello,
 	Shield,
@@ -26,9 +29,13 @@ import {
 	Workflow,
 	FileSignature,
 	CheckCircle,
+	ChevronDown,
+	ChevronUp,
 } from "lucide-react";
 
 export default function LandingPage() {
+	const [showAllFeatures, setShowAllFeatures] = useState(false);
+
 	const features = [
 		{
 			name: "Kanban Board",
@@ -127,6 +134,8 @@ export default function LandingPage() {
 			icon: Plug,
 		},
 	];
+
+	const visibleFeatures = showAllFeatures ? features : features.slice(0, 8);
 
 	const orgManagementFeatures = [
 		{
@@ -252,7 +261,7 @@ export default function LandingPage() {
 
 						<div className="mt-10">
 							<dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-x-8 md:gap-y-10">
-								{features.map((feature) => (
+								{visibleFeatures.map((feature) => (
 									<div key={feature.name} className="relative">
 										<dt>
 											<div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
@@ -269,6 +278,25 @@ export default function LandingPage() {
 								))}
 							</dl>
 						</div>
+
+						{features.length > 8 && (
+							<div className="mt-10 text-center">
+								<Button
+									onClick={() => setShowAllFeatures(!showAllFeatures)}
+									variant="outline"
+									size="lg">
+									{showAllFeatures ? (
+										<>
+											Show Less <ChevronUp className="ml-2 h-4 w-4" />
+										</>
+									) : (
+										<>
+											Show More <ChevronDown className="ml-2 h-4 w-4" />
+										</>
+									)}
+								</Button>
+							</div>
+						)}
 					</div>
 				</section>
 
