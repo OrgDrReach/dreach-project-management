@@ -33,7 +33,6 @@ import {
 	ChevronUp,
 } from "lucide-react";
 import { Footer } from "@/components/footer/Footer";
-import { DottedGrid } from "@/components/DottedGrid";
 
 export default function LandingPage() {
 	const [showAllFeatures, setShowAllFeatures] = useState(false);
@@ -195,11 +194,10 @@ export default function LandingPage() {
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
-			<DottedGrid className="opacity-50" />
 			<Navigation />
 			<main className="relative">
 				{/* Hero Section */}
-				<section className="relative bg-white dark:bg-gray-800 overflow-hidden">
+				<section className="relative bg-white/80 dark:bg-gray-800/80 overflow-hidden">
 					<div className="max-w-7xl mx-auto">
 						<div className="relative z-10 pb-8 bg-white dark:bg-gray-800 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
 							<svg
@@ -247,7 +245,7 @@ export default function LandingPage() {
 				</section>
 
 				{/* Features Section */}
-				<section className="relative py-12 bg-gray-100/50 dark:bg-gray-700/50">
+				<section className="relative py-12 bg-gray-100/80 dark:bg-gray-700/80">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
@@ -290,8 +288,7 @@ export default function LandingPage() {
 										onClick={() => setShowAllFeatures(!showAllFeatures)}
 										variant="outline"
 										size="lg"
-										className="relative bg-indigo-600 text-white hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 transition-all duration-300 ease-in-out"
-									>
+										className="relative bg-indigo-600 text-white hover:bg-indigo-700 border-indigo-600 hover:border-indigo-700 transition-all duration-300 ease-in-out">
 										{showAllFeatures ? (
 											<>
 												Show Less <ChevronUp className="ml-2 h-4 w-4" />
@@ -309,7 +306,7 @@ export default function LandingPage() {
 				</section>
 
 				{/* Organization Management Section */}
-				<section className="relative py-16 bg-white/50 dark:bg-gray-800/50">
+				<section className="relative py-16 bg-white/80 dark:bg-gray-800/80">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center mb-12">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
