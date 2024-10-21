@@ -33,6 +33,7 @@ import {
 	ChevronUp,
 } from "lucide-react";
 import { Footer } from "@/components/footer/Footer";
+import { DottedGrid } from "@/components/DottedGrid";
 
 export default function LandingPage() {
 	const [showAllFeatures, setShowAllFeatures] = useState(false);
@@ -195,9 +196,10 @@ export default function LandingPage() {
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
 			<Navigation />
-			<main className="relative">
+			<DottedGrid />
+			<main className="relative z-10">
 				{/* Hero Section */}
-				<section className="relative bg-white/80 dark:bg-gray-800/80 overflow-hidden">
+				<section className="relative bg-white/80 dark:bg-gray-800 overflow-hidden">
 					<div className="max-w-7xl mx-auto">
 						<div className="relative z-10 pb-8 bg-white dark:bg-gray-800 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
 							<svg
