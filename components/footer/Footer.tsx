@@ -15,8 +15,8 @@ export const Footer: React.FC = () => {
         </svg>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="space-y-4">
+        <div className=" flex flex-col items-center justify-center md:grid md:grid-cols-4 gap-8">
+          <div className="space-y-4 justify-center">
             <div className="flex items-center">
               <Image src="/favicon.ico" alt="Dr. Reach Insights Logo" width={32} height={32} className="mr-2" />
               <span className="text-xl font-bold">Dr. Reach Insights</span>
@@ -51,9 +51,9 @@ export const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">&copy; {currentYear} Dr. Reach Insights. All rights reserved.</p>
-          <div className="mt-4 md:mt-0 flex space-x-4">
+        <div className="mt-12 pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-center md:justify-between items-center">
+          <p className="text-gray-400 text-xs md:text-base text-center">&copy; {currentYear} Dr. Reach Insights. All rights reserved.</p>
+          <div className="mt-4 md:mt-0 flex text-xs md:text-base space-x-4">
             <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</Link>
           </div>
