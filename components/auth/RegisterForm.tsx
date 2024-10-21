@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { signup } from "@/app/auth/actions";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -120,6 +121,7 @@ export default function RegisterForm() {
           <Button 
             type="submit" 
             className="w-full"
+            formAction={signup}
             disabled={isLoading}
           >
             {isLoading ? (

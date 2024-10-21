@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { login } from "@/app/auth/actions";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -95,6 +96,7 @@ export default function LoginForm() {
           <Button 
             type="submit" 
             className="w-full"
+            formAction={login}
             disabled={isLoading}
           >
             {isLoading ? (
