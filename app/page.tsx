@@ -52,7 +52,7 @@ export default function LandingPage() {
 			icon: Shield,
 		},
 		{
-			name: "AI-Powered Insights",
+			name: "AI-Powered Insights (In the Future Updates)",
 			description:
 				"Leverage artificial intelligence for predictive analytics and automated task assignment.",
 			icon: Brain,
