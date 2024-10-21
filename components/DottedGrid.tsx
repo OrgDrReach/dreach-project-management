@@ -4,6 +4,17 @@ interface DottedGridProps {
   className?: string;
 }
 
+// Add this type declaration at the top of the file
+declare global {
+  interface Window {
+    CSS: {
+      paintWorklet: {
+        addModule(moduleURL: string): Promise<void>;
+      };
+    };
+  }
+}
+
 export const DottedGrid: React.FC<DottedGridProps> = ({ className = '' }) => {
   return (
     <div className={`pointer-events-none ${className}`}>
@@ -47,13 +58,13 @@ const gridStyles = `
   }
 `;
 
-if (typeof document !== 'undefined') {
+if (typeof window !== 'undefined') {
   const style = document.createElement('style');
   style.textContent = gridStyles;
   document.head.appendChild(style);
 
-  if ('paintWorklet' in CSS) {
-    CSS.paintWorklet.addModule(`
+  if ('paintWorklet' in window.CSS) {
+    window.CSS.paintWorklet.addModule(`
       registerPaint('dotted-background', class {
         static get inputProperties() {
           return ['--dot-color', '--dot-size', '--dot-space'];
