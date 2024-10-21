@@ -33,7 +33,7 @@ import {
 	ChevronUp,
 } from "lucide-react";
 import { Footer } from "@/components/footer/Footer";
-import { DottedGrid } from "@/components/DottedGrid";
+import { DottedGrid } from "@/components/pattern/DottedGrid";
 
 export default function LandingPage() {
 	const [showAllFeatures, setShowAllFeatures] = useState(false);
