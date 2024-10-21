@@ -212,8 +212,8 @@ export default function LandingPage() {
 								aria-hidden="true">
 								<polygon points="50,0 100,0 50,100 0,100" />
 							</svg>
-							<div className="relative px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 lg:pt-32">
-								<div className="text-left">
+							<div className="relative px-4 sm:px-6 lg:px-8 pt-24 sm:pt-24 lg:pt-32">
+								<div className="text-center sm:text-left md:text-center lg:text-left">
 									<h1 className="text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
 										<span className="block xl:inline">Revolutionize Your</span>{" "}
 										<span className="block text-indigo-600 xl:inline">
@@ -226,7 +226,7 @@ export default function LandingPage() {
 										AI-powered insights to streamline your workflow and boost
 										productivity.
 									</p>
-									<div className="mt-5 sm:mt-8 sm:flex sm:justify-start">
+									<div className="mt-5 sm:mt-8 sm:flex sm:justify-start md:justify-center lg:justify-start">
 										<div className="rounded-md shadow">
 											<Button asChild size="lg">
 												<Link href="/auth/sign-in">Get Started</Link>
@@ -251,7 +251,7 @@ export default function LandingPage() {
 				{/* Features Section */}
 				<section className="relative py-12 bg-gray-200/50 dark:bg-gray-800/60">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="lg:text-center">
+						<div className="text-center">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
 								Features
 							</h2>
@@ -312,7 +312,7 @@ export default function LandingPage() {
 				{/* Organization Management Section */}
 				<section className="relative py-16 bg-gray-300/10 dark:bg-gray-800/50">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="lg:text-center mb-12">
+						<div className="text-center mb-12">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
 								Organization Management
 							</h2>
