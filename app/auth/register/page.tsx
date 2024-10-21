@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Register() {
