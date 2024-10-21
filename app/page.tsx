@@ -196,12 +196,14 @@ export default function LandingPage() {
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
 			<Navigation />
-			<DottedGrid />
+			<DottedGrid className="absolute inset-0 z-0 opacity-100" />
 			<main className="relative z-10">
 				{/* Hero Section */}
-				<section className="relative bg-white/80 dark:bg-gray-800 overflow-hidden">
+				<section className="relative bg-white/80 dark:bg-[#1F2937] overflow-hidden">
+					<DottedGrid className="absolute inset-0 z-0 opacity-100" />
 					<div className="max-w-7xl mx-auto">
-						<div className="relative z-10 pb-8 bg-white dark:bg-gray-800 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+						<div className="relative z-10 pb-8 bg-white dark:bg-gray-800 dark:bg-opacity-100 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+							<DottedGrid className="absolute inset-0 z-0 opacity-100" />
 							<svg
 								className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white dark:text-gray-800 transform translate-x-1/2"
 								fill="currentColor"
@@ -247,7 +249,7 @@ export default function LandingPage() {
 				</section>
 
 				{/* Features Section */}
-				<section className="relative py-12 bg-gray-100/80 dark:bg-gray-700/80">
+				<section className="relative py-12 bg-gray-200/50 dark:bg-gray-800/60">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
@@ -308,7 +310,7 @@ export default function LandingPage() {
 				</section>
 
 				{/* Organization Management Section */}
-				<section className="relative py-16 bg-white/80 dark:bg-gray-800/80">
+				<section className="relative py-16 bg-gray-300/10 dark:bg-gray-800/50">
 					<div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 						<div className="lg:text-center mb-12">
 							<h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">
