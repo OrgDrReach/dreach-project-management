@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { signup } from "@/app/auth/actions";
 import { Eye, EyeOff } from "lucide-react";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -33,6 +34,9 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // Add this line to create a Supabase client
+  const supabase = createClientComponentClient()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -41,17 +45,23 @@ export default function RegisterForm() {
     try {
       const validatedData = registerSchema.parse({ name, email, password, confirmPassword });
 
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedData),
-      });
+      const { data, error } = await supabase.auth.signUp({
+        email: validatedData.email,
+        password: validatedData.password,
+        options: {
+          data: {
+            name: validatedData.name,
+          },
+        },
+      })
 
-      if (response.ok) {
-        router.push("/dashboard");
-      } else {
-        const data = await response.json();
-        setError(data.error || "Registration failed");
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        // Successful registration, redirect to email verification page
+        router.push(`/auth/verify-email?email=${encodeURIComponent(validatedData.email)}`);
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
