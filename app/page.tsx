@@ -227,8 +227,8 @@ export default function LandingPage() {
 										productivity.
 									</p>
 									<div className="mt-5 sm:mt-8 sm:flex sm:justify-start md:justify-center lg:justify-start">
-										<div className="rounded-md shadow">
-											<Button asChild size="lg">
+										<div className="rounded-md lg:shadow-xl">
+											<Button asChild size="lg" className={`shadow-xl`}>
 												<Link href="/auth/sign-in">Get Started</Link>
 											</Button>
 										</div>
