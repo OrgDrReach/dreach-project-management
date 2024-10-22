@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff } from "lucide-react";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { login } from "@/app/auth/actions";
 
 const loginSchema = z.object({
@@ -23,6 +24,7 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,24 +32,8 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      const validatedData = loginSchema.parse({ email, password });
-
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedData),
-      });
-
-      if (response.ok) {
-        const { role } = await response.json();
-        if (role === "admin") {
-          router.push("/dashboard/admin");
-        } else {
-          router.push("/dashboard");
-        }
-      } else {
-        setError("Invalid email or password");
-      }
+      loginSchema.parse({ email, password });
+      // The login action will handle the form submission
     } catch (error) {
       if (error instanceof z.ZodError) {
         setError(error.errors[0].message);
@@ -55,7 +41,6 @@ export default function LoginForm() {
         console.error("Login error:", error);
         setError("An error occurred during login");
       }
-    } finally {
       setIsLoading(false);
     }
   };
@@ -71,6 +56,7 @@ export default function LoginForm() {
             <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -83,6 +69,7 @@ export default function LoginForm() {
             <div className="relative">
               <Input
                 id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
