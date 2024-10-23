@@ -2476,7 +2476,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.4":
+"axios@npm:^1.7.2, axios@npm:^1.7.4":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
   dependencies:
@@ -2498,6 +2498,13 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 10c0/9308baf0a7e4838a82bbfd11e01b1cb0f0cf2893bc1676c27c2a8c0e70cbae1c59120c3268517a8ae7fb6376b4639ef81ca22582611dbee4ed28df945134aaee
+  languageName: node
+  linkType: hard
+
+"base-64@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "base-64@npm:1.0.0"
+  checksum: 10c0/d886cb3236cee0bed9f7075675748b59b32fad623ddb8ce1793c790306aa0f76a03238cad4b3fb398abda6527ce08a5588388533a4ccade0b97e82b9da660e28
   languageName: node
   linkType: hard
 
@@ -3091,8 +3098,10 @@ __metadata:
     embla-carousel-react: "npm:^8.3.0"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.15"
+    form-data: "npm:^4.0.1"
     input-otp: "npm:^1.2.4"
     lucide-react: "npm:^0.453.0"
+    mailgun.js: "npm:^10.2.3"
     next: "npm:14.2.15"
     next-themes: "npm:^0.3.0"
     nodemailer: "npm:^6.9.15"
@@ -3762,7 +3771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0":
+"form-data@npm:^4.0.0, form-data@npm:^4.0.1":
   version: 4.0.1
   resolution: "form-data@npm:4.0.1"
   dependencies:
@@ -4686,6 +4695,17 @@ __metadata:
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
   checksum: 10c0/eec257049609eff958329943da6e129c8db1969aa789c6e922f59418d7b6f6913c22e971ac7885efc80eeb3e41e180c48afdee92738a63a31ef5a39836037b7e
+  languageName: node
+  linkType: hard
+
+"mailgun.js@npm:^10.2.3":
+  version: 10.2.3
+  resolution: "mailgun.js@npm:10.2.3"
+  dependencies:
+    axios: "npm:^1.7.2"
+    base-64: "npm:^1.0.0"
+    url-join: "npm:^4.0.1"
+  checksum: 10c0/47418268c8a1fec9e6134ee354a20f2adaa1cb41f31493d35e22e911afc51bb7d4a387c27bfc468959ee4b06ec4e59477df1dab9fab38086935565173fb75a99
   languageName: node
   linkType: hard
 
@@ -6405,6 +6425,13 @@ __metadata:
   dependencies:
     punycode: "npm:^2.1.0"
   checksum: 10c0/4ef57b45aa820d7ac6496e9208559986c665e49447cb072744c13b66925a362d96dd5a46c4530a6b8e203e5db5fe849369444440cb22ecfc26c679359e5dfa3c
+  languageName: node
+  linkType: hard
+
+"url-join@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "url-join@npm:4.0.1"
+  checksum: 10c0/ac65e2c7c562d7b49b68edddcf55385d3e922bc1dd5d90419ea40b53b6de1607d1e45ceb71efb9d60da02c681d13c6cb3a1aa8b13fc0c989dfc219df97ee992d
   languageName: node
   linkType: hard
 
