@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 import { signup } from "@/app/auth/actions";
 import { Eye, EyeOff } from "lucide-react";
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { generateOTP } from '@/utils/otp'; // You'll need to create this utility function
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -52,6 +53,7 @@ export default function RegisterForm() {
           data: {
             name: validatedData.name,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
@@ -60,8 +62,26 @@ export default function RegisterForm() {
       }
 
       if (data) {
-        // Successful registration, redirect to email verification page
-        router.push(`/auth/verify-email?email=${encodeURIComponent(validatedData.email)}`);
+        const otp = generateOTP(); // Generate a 6-digit OTP
+        
+        // Send verification email
+        const response = await fetch('/api/send-verification-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: validatedData.email, otp }),
+        });
+
+        if (response.ok) {
+          // Store OTP in session storage or context for verification
+          sessionStorage.setItem('verificationOTP', otp);
+          
+          // Redirect to email verification page
+          router.push(`/auth/verify-email?email=${encodeURIComponent(validatedData.email)}`);
+        } else {
+          throw new Error('Failed to send verification email');
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
