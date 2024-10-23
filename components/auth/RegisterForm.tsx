@@ -53,31 +53,22 @@ export default function RegisterForm() {
           data: {
             name: validatedData.name,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
-      })
+      });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       if (data) {
-        const otp = generateOTP(); // Generate a 6-digit OTP
+        const otp = generateOTP();
         
-        // Send verification email
         const response = await fetch('/api/send-verification-email', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: validatedData.email, otp }),
         });
 
         if (response.ok) {
-          // Store OTP in session storage or context for verification
           sessionStorage.setItem('verificationOTP', otp);
-          
-          // Redirect to email verification page
           router.push(`/auth/verify-email?email=${encodeURIComponent(validatedData.email)}`);
         } else {
           throw new Error('Failed to send verification email');
