@@ -8,19 +8,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { signup } from "@/app/auth/actions";
-import { Eye, EyeOff } from "lucide-react";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+// Zod schema for form validation
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -39,23 +41,21 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     try {
-      const validatedData = registerSchema.parse({ name, email, password, confirmPassword });
-
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validatedData),
+      // Validate the form data with Zod schema
+      const validatedData = registerSchema.parse({
+        name,
+        email,
+        password,
+        confirmPassword,
       });
 
-      if (response.ok) {
-        router.push("/dashboard");
-      } else {
-        const data = await response.json();
-        setError(data.error || "Registration failed");
-      }
-    } catch (error) {
+      // Call signup function and handle response
+      const res = await signup(validatedData);
+      // Assuming signup returns a status or response
+      console.log("The result is",res);
+    } catch (error: any) {
       if (error instanceof z.ZodError) {
-        setError(error.errors[0].message);
+        setError(error.errors[0].message); // Set the first validation error
       } else {
         console.error("Registration error:", error);
         setError("An error occurred during registration");
@@ -68,12 +68,16 @@ export default function RegisterForm() {
   return (
     <Card className="w-full bg-white dark:bg-gray-800">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">Create an Account</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
+          Create an Account
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">Full Name</Label>
+            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">
+              Full Name
+            </Label>
             <Input
               id="name"
               type="text"
@@ -84,7 +88,9 @@ export default function RegisterForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email</Label>
+            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -95,7 +101,12 @@ export default function RegisterForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">Password</Label>
+            <Label
+              htmlFor="password"
+              className="text-gray-700 dark:text-gray-300"
+            >
+              Password
+            </Label>
             <div className="relative">
               <Input
                 id="password"
@@ -119,7 +130,12 @@ export default function RegisterForm() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300">Confirm Password</Label>
+            <Label
+              htmlFor="confirmPassword"
+              className="text-gray-700 dark:text-gray-300"
+            >
+              Confirm Password
+            </Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
@@ -147,12 +163,7 @@ export default function RegisterForm() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button 
-            type="submit" 
-            className="w-full"
-            formAction={signup}
-            disabled={isLoading}
-          >
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
