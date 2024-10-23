@@ -43,3 +43,18 @@ export async function signup(formData: FormData) {
   revalidatePath('/', 'layout')
   redirect('/')
 }
+
+export async function resendVerificationEmail(email: string) {
+  const supabase = createClient()
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { success: 'Verification email resent. Please check your inbox.' }
+}
