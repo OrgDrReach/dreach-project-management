@@ -17,7 +17,7 @@ export function Navigation() {
 					<div className="flex items-center space-x-4">
 						<ThemeToggle />
 						<Button asChild>
-							<Link href="/auth/sign-in">Get Started</Link>
+							<Link href="/auth/login">Get Started</Link>
 						</Button>
 					</div>
 				</div>
