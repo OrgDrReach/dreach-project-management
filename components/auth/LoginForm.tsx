@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Eye, EyeOff } from "lucide-react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { login } from "@/app/auth/actions";
 
 const loginSchema = z.object({
@@ -20,94 +19,86 @@ const loginSchema = z.object({
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setIsLoading(true);
 
     try {
       loginSchema.parse({ email, password });
-      // The login action will handle the form submission
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        setError(error.errors[0].message);
-      } else {
-        console.error("Login error:", error);
-        setError("An error occurred during login");
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
+      const result = await login(formData);
+      if (result?.error) {
+        setError(result.error);
       }
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Card className="w-full bg-white dark:bg-gray-800">
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">Sign In</CardTitle>
+        <CardTitle>Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 dark:text-gray-300">Password</Label>
-            <div className="relative">
+        <form onSubmit={handleSubmit}>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 pr-10"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
               />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
-                ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
-                )}
-              </button>
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-gray-500" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-gray-500" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           {error && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="mt-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button 
-            type="submit" 
-            className="w-full"
-            formAction={login}
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Signing In...
-              </>
-            ) : (
-              "Sign In"
-            )}
+          <Button className="w-full mt-4" type="submit" disabled={isLoading}>
+            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            Log In
           </Button>
         </form>
       </CardContent>
