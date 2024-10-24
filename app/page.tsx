@@ -229,7 +229,7 @@ export default function LandingPage() {
 									<div className="mt-5 sm:mt-8 sm:flex sm:justify-start md:justify-center lg:justify-start">
 										<div className="rounded-md lg:shadow-xl">
 											<Button asChild size="lg" className={`shadow-xl`}>
-												<Link href="/auth/sign-in">Get Started</Link>
+												<Link href="/auth/login">Get Started</Link>
 											</Button>
 										</div>
 									</div>
