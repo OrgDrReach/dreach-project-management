@@ -1,60 +1,63 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export async function login(formData: FormData) {
-  const supabase = createClient()
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
 
-  const { error } = await supabase.auth.signInWithPassword(data)
-
-  if (error) {
-    redirect('/auth/error')
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/')
-}
-
-export async function signup(formData: FormData) {
-  const supabase = createClient()
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-
-  const { error } = await supabase.auth.signUp(data)
-
-  if (error) {
-    redirect('/auth/error')
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/')
-}
-
-export async function resendVerificationEmail(email: string) {
-  const supabase = createClient()
-
-  const { error } = await supabase.auth.resend({
-    type: 'signup',
-    email: email,
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
   })
 
   if (error) {
     return { error: error.message }
   }
 
-  return { success: 'Verification email resent. Please check your inbox.' }
+  redirect('/dashboard')
+}
+
+export async function signup(formData: FormData) {
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
+  const name = formData.get('name') as string
+
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        name: name,
+      },
+    },
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  // After successful signup, redirect to email verification page
+  redirect('/auth/verify-email')
+}
+
+export async function logout() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  redirect('/auth/login')
 }
