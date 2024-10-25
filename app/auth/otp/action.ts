@@ -19,7 +19,7 @@ export async function generateOTP(): Promise<string> {
 
 export async function sendOTP(email: string) {
   const otp = await generateOTP();
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // Await the cookies() call
 
   // Store OTP in a cookie (you might want to use a more secure method in production)
   cookieStore.set('verificationOTP', otp, { maxAge: 600, path: '/' });
@@ -43,7 +43,7 @@ export async function sendOTP(email: string) {
 
 export async function verifyOTP(formData: FormData) {
   const enteredOTP = formData.get('otp') as string;
-  const cookieStore = await cookies();
+  const cookieStore = await cookies(); // Await the cookies() call
   const storedOTP = cookieStore.get('verificationOTP')?.value;
   const email = cookieStore.get('verificationEmail')?.value;
 
@@ -55,7 +55,7 @@ export async function verifyOTP(formData: FormData) {
     return { error: 'Invalid OTP. Please try again.' };
   }
 
-  const supabase = createClient(cookieStore);
+  const supabase = createClient();
 
   // Update user's email_confirmed_at to confirm the account
   const { error } = await supabase.auth.updateUser({
