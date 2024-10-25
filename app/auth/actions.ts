@@ -3,13 +3,13 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { sendOTP } from './otp/action'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createClient()
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -28,16 +28,17 @@ export async function signup(formData: FormData) {
   const password = formData.get('password') as string
   const name = formData.get('name') as string
 
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createClient()
 
-  const { error } = await supabase.auth.signUp({
+  // Sign up the user without email confirmation
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         name: name,
       },
+      // Remove emailRedirectTo option completely to disable email confirmation
     },
   })
 
@@ -45,13 +46,18 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  // After successful signup, redirect to email verification page
-  redirect('/auth/verify-email')
+  // Send OTP
+  const otpResult = await sendOTP(email);
+  if (otpResult.error) {
+    return { error: otpResult.error };
+  }
+
+  // Redirect to OTP verification page
+  redirect('/auth/verify-otp')
 }
 
 export async function logout() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createClient()
 
   const { error } = await supabase.auth.signOut()
 
