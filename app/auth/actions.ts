@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { sendOTP } from './otp/action'
+import { sendOTP, verifyOTP } from './otp/action'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
@@ -67,3 +67,5 @@ export async function logout() {
 
   redirect('/auth/login')
 }
+
+export { verifyOTP };
