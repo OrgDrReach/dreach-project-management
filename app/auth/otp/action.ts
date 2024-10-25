@@ -23,6 +23,7 @@ export async function sendOTP(email: string) {
 
   // Store OTP in a cookie (you might want to use a more secure method in production)
   cookieStore.set('verificationOTP', otp, { maxAge: 600, path: '/' });
+  cookieStore.set('verificationEmail', email, { maxAge: 600, path: '/' });
 
   // Send OTP via email
   try {
@@ -46,7 +47,7 @@ export async function verifyOTP(formData: FormData) {
   const storedOTP = cookieStore.get('verificationOTP')?.value;
   const email = cookieStore.get('verificationEmail')?.value;
 
-  if (!storedOTP) {
+  if (!storedOTP || !email) {
     return { error: 'OTP expired or email not found. Please sign up again.' };
   }
 
@@ -54,8 +55,20 @@ export async function verifyOTP(formData: FormData) {
     return { error: 'Invalid OTP. Please try again.' };
   }
 
+  const supabase = createClient();
+
+  // Update user's email_confirmed_at to confirm the account
+  const { error } = await supabase.auth.updateUser({
+    data: { email_confirmed_at: new Date().toISOString() }
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
   // Clear the verification cookies
   cookieStore.set('verificationOTP', '', { maxAge: 0, path: '/' });
+  cookieStore.set('verificationEmail', '', { maxAge: 0, path: '/' });
 
   // Redirect to dashboard
   redirect('/dashboard');
