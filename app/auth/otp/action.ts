@@ -43,7 +43,7 @@ export async function sendOTP(email: string) {
 
 export async function verifyOTP(formData: FormData) {
   const enteredOTP = formData.get('otp') as string;
-  const cookieStore = await cookies(); // Await the cookies() call
+  const cookieStore = await cookies();
   const storedOTP = cookieStore.get('verificationOTP')?.value;
   const email = cookieStore.get('verificationEmail')?.value;
 
@@ -58,17 +58,32 @@ export async function verifyOTP(formData: FormData) {
   const supabase = createClient();
 
   // Update user's email_confirmed_at to confirm the account
-  const { error } = await supabase.auth.updateUser({
+  const { data, error: updateError } = await supabase.auth.updateUser({
+    email: email,
     data: { email_confirmed_at: new Date().toISOString() }
   });
 
-  if (error) {
-    return { error: error.message };
+  if (updateError) {
+    return { error: updateError.message };
+  }
+
+  if (!data.user) {
+    return { error: 'User not found' };
   }
 
   // Clear the verification cookies
   cookieStore.set('verificationOTP', '', { maxAge: 0, path: '/' });
   cookieStore.set('verificationEmail', '', { maxAge: 0, path: '/' });
+
+  // Sign in the user after successful OTP verification
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: cookieStore.get('tempPassword')?.value || '',
+  });
+
+  if (signInError) {
+    return { error: 'Failed to sign in after OTP verification. Please try logging in manually.' };
+  }
 
   // Redirect to dashboard
   redirect('/dashboard');
