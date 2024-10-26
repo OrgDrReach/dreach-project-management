@@ -11,7 +11,8 @@ export async function login(formData: FormData) {
 
   const supabase = createClient()
 
-  const { error } = await supabase.auth.signInWithPassword({
+  // Attempt to sign in
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
@@ -20,6 +21,16 @@ export async function login(formData: FormData) {
     return { error: error.message }
   }
 
+  if (!data.user) {
+    return { error: 'User not found' }
+  }
+
+  // Check if the user's email is confirmed
+  if (!data.user.email_confirmed_at) {
+    return { error: 'Please confirm your email before logging in' }
+  }
+
+  // If login is successful and email is confirmed, redirect to dashboard
   redirect('/dashboard')
 }
 
@@ -30,15 +41,14 @@ export async function signup(formData: FormData) {
 
   const supabase = createClient()
 
-  // Sign up the user without email confirmation
+  // Sign up the user with email confirmation disabled and include the name in user metadata
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
-        name: name,
+        full_name: name, // Store the user's name in the user metadata
       },
-      // Remove emailRedirectTo option completely to disable email confirmation
     },
   })
 
