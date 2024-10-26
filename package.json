@@ -49,6 +49,7 @@
     "form-data": "^4.0.1",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.453.0",
+    "mailbit-library-nodejs": "^1.0.3",
     "mailgun.js": "^10.2.3",
     "next": "15.0.1",
     "next-themes": "^0.3.0",
