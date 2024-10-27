@@ -9,25 +9,58 @@ export async function login(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
+  if (!email || !password) {
+    return { error: 'Email and password are required' }
+  }
+
   const supabase = createClient()
 
   // Attempt to sign in
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
-  if (error) {
-    return { error: error.message }
+  if (signInError) {
+    return { error: signInError.message }
   }
 
-  if (!data.user) {
+  if (!signInData.user) {
     return { error: 'User not found' }
   }
 
+  // Fetch additional user data from the database
+  const { data: userData, error: userDataError } = await supabase
+    .from('users')
+    .select('*')
+    .eq('id', signInData.user.id)
+    .single()
+
+  if (userDataError) {
+    return { error: 'Error fetching user data' }
+  }
+
   // Check if the user's email is confirmed
-  if (!data.user.email_confirmed_at) {
-    return { error: 'Please confirm your email before logging in' }
+  if (!signInData.user.email_confirmed_at) {
+    // Send OTP for email verification
+    const otpResult = await sendOTP(email)
+    if (otpResult.error) {
+      return { error: otpResult.error }
+    }
+    // Redirect to OTP verification page
+    redirect('/auth/verify-otp')
+  }
+
+  // Update the session with additional user data
+  const { error: updateSessionError } = await supabase.auth.updateUser({
+    data: {
+      ...userData,
+      full_name: userData.full_name || signInData.user.user_metadata.full_name,
+    },
+  })
+
+  if (updateSessionError) {
+    return { error: 'Error updating user session' }
   }
 
   // If login is successful and email is confirmed, redirect to dashboard
@@ -55,6 +88,9 @@ export async function signup(formData: FormData) {
   if (error) {
     return { error: error.message }
   }
+
+  const cookieStore = await cookies();
+  cookieStore.set('tempPassword', password, { maxAge: 600, path: '/', httpOnly: true, secure: true });
 
   // Send OTP
   const otpResult = await sendOTP(email);
