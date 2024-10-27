@@ -58,31 +58,45 @@ export async function verifyOTP(formData: FormData) {
   const supabase = createClient();
 
   // Update user's email_confirmed_at to confirm the account
-  const { data, error: updateError } = await supabase.auth.updateUser({
-    email: email,
+  const { data: userData, error: updateError } = await supabase.auth.updateUser({
     data: { email_confirmed_at: new Date().toISOString() }
   });
 
   if (updateError) {
-    return { error: updateError.message };
+    console.error('Error updating user in Supabase Auth:', updateError);
+    return { error: `Error confirming user: ${updateError.message}` };
   }
 
-  if (!data.user) {
-    return { error: 'User not found' };
+  if (!userData.user) {
+    console.error('User data not found after update');
+    return { error: 'User data not found after confirmation. Please try logging in.' };
+  }
+
+  // Also update the custom users table if you have one
+  const { error: dbError } = await supabase
+    .from('users')
+    .update({ email_confirmed_at: new Date().toISOString() })
+    .eq('email', email);
+
+  if (dbError) {
+    console.error('Error updating user in database:', dbError);
+    // Don't return an error here, as the auth update was successful
+    console.warn('Failed to update custom users table, but auth update was successful');
   }
 
   // Clear the verification cookies
   cookieStore.set('verificationOTP', '', { maxAge: 0, path: '/' });
   cookieStore.set('verificationEmail', '', { maxAge: 0, path: '/' });
 
-  // Sign in the user after successful OTP verification
+  // Sign in the user after successful verification
   const { error: signInError } = await supabase.auth.signInWithPassword({
     email: email,
     password: cookieStore.get('tempPassword')?.value || '',
   });
 
   if (signInError) {
-    return { error: 'Failed to sign in after OTP verification. Please try logging in manually.' };
+    console.error('Error signing in after verification:', signInError);
+    return { error: 'Account confirmed, but failed to sign in. Please try logging in manually.' };
   }
 
   // Redirect to dashboard
